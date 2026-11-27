@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "https-proxy-agent": "^7.0.6",
+    "pino": "^9.5.0",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0",
+    "@pontalabs/baileys": "^1.2.11"
+  },
+  "description": "Bot WhatsApp stiker + Sound Sticker (Baileys + ffmpeg)",
+  "main": "index.js",
+  "name": "bot-stiker-wa-bersuara",
+  "scripts": {
+    "start": "node index.js",
+    "test-convert": "node test-convert.js"
+  },
+  "type": "module",
+  "version": "1.0.0"
+}
