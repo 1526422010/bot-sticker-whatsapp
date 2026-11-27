@@ -74,4 +74,4 @@ fps, dan batas ukuran stiker.
   Jangan spam, jangan kirim massal.
 - Video panjang/gede bakal ditolak WA sebagai stiker (batas ~1MB). Bot ini otomatis
   nurunin fps & kualitas kalau hasilnya kegedean.
-- Jalan 24 jam? Taruh di VPS / PC yang nyala terus, jalanin pakai `pm2 start index.js`.
+- Jalan 24 jam? Taruh di VPS / PC yang nyala terus, jalanin pakai `pm2 start index.js/npm start`.
