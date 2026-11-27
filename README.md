@@ -1,5 +1,7 @@
 # Bot Stiker WA Bersuara 🤖🔊
 
+**Bahasa:** [Indonesia](README.md) | [English](README.en.md)
+
 Bot WhatsApp pembuat stiker: kirim `.ping` dibalas Pong, kirim foto / video
 pendek -> jadi stiker, dan video bersuara -> jadi **Sound Sticker**.
 
@@ -27,6 +29,7 @@ Mode:
 | `.s` | Kirim/reply foto atau video -> stiker (animasi kalau video) |
 | `#sticker` | Video -> Sound Sticker native |
 | `.menu` | Daftar perintah |
+| *(otomatis)* | Kirim video langsung (tanpa perintah) -> Sound Sticker; kirim foto langsung -> stiker biasa (atur lewat `autoDetect` di `config.js`) |
 
 ## Cara jalanin
 
@@ -46,7 +49,7 @@ Syarat: **Node.js 18+** dan **ffmpeg** terinstall.
 # Windows:        winget install ffmpeg   (atau download dari ffmpeg.org)
 # Termux:         pkg install nodejs ffmpeg
 
-cd bot-sticker-whatsapp
+cd bot-stiker-wa
 npm install
 npm start
 ```
@@ -67,6 +70,11 @@ npm run test-convert
 Edit `config.js`: nama bot, nama pack stiker, durasi maks video (default 8 detik),
 fps, dan batas ukuran stiker.
 
+## Lisensi
+
+MIT — lihat file [LICENSE](LICENSE). Bebas dipakai & diubah, wajib mencantumkan
+nama pembuat asli (Pakaw).
+
 ## Catatan penting
 
 - Pakai **nomor kedua / nomor khusus bot**, jangan nomor utama. Baileys itu library
@@ -74,4 +82,4 @@ fps, dan batas ukuran stiker.
   Jangan spam, jangan kirim massal.
 - Video panjang/gede bakal ditolak WA sebagai stiker (batas ~1MB). Bot ini otomatis
   nurunin fps & kualitas kalau hasilnya kegedean.
-- Jalan 24 jam? Taruh di VPS / PC yang nyala terus, jalanin pakai `pm2 start index.js/npm start`.
+- Jalan 24 jam? Taruh di VPS / PC yang nyala terus, jalanin pakai `pm2 start index.js`.
