@@ -76,7 +76,7 @@ fps, and the sticker size limit.
 ## License
 
 MIT — see the [LICENSE](LICENSE) file. Free to use & modify, as long as the
-original author's name (Pakaw) is credited.
+original author's name is credited.
 
 ## Important notes
 
