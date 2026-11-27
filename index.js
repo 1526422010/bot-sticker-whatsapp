@@ -190,8 +190,6 @@ async function start() {
 ${config.prefix}ping - cek bot aktif
 ${config.prefix}s - kirim/reply foto atau video -> stiker
 #sticker - kirim/reply *video* -> Sound Sticker native WA (stiker beneran + suara, tap ikon audio buat putar). Video dipotong maks ${config.soundAnimatedMaxSeconds} detik
-#sticker (cara 2) - kirim *foto* sambil reply *audio/VN* -> Sound Sticker dari foto + suara itu (maks ${config.soundStaticMaxSeconds} detik)
-${config.prefix}svn - reply *video* -> stiker animasi + voice note (2 pesan, cara lama)
 ${config.prefix}menu - menu ini
 
 Otomatis juga bisa: kirim *video* langsung (tanpa perintah) -> Sound Sticker, kirim *foto* langsung -> stiker biasa.
@@ -202,13 +200,12 @@ Catatan: Sound Sticker cuma bunyi di WhatsApp yang udah dapet fitur itu (Beta 2.
 
         const isStickerCmd = [`${config.prefix}s`, `${config.prefix}sticker`, `${config.prefix}stiker`].includes(cmd);
         const isSoundCmd = (cmd === '#sticker'); // perintah Sound Sticker: #sticker (tanpa prefix titik)
-        const isStickerVnCmd = cmd === `${config.prefix}svn`;
 
         // AUTO-DETECT (config.autoDetect): tanpa perintah, media yang dikirim
         // langsung diproses - video -> Sound Sticker, foto -> stiker biasa.
         // Cuma media milik pesan ini sendiri (bukan reply) dan teksnya bukan perintah.
         let autoMode = null;
-        if (config.autoDetect && !isStickerCmd && !isSoundCmd && !isStickerVnCmd && !cmd.startsWith(config.prefix)) {
+        if (config.autoDetect && !isStickerCmd && !isSoundCmd && !cmd.startsWith(config.prefix)) {
           const { own } = getOwnAndQuotedMedia(msg);
           if (own?.type === 'video') autoMode = 'sound';
           else if (own?.type === 'image') autoMode = 'sticker';
@@ -216,18 +213,14 @@ Catatan: Sound Sticker cuma bunyi di WhatsApp yang udah dapet fitur itu (Beta 2.
         const effStickerCmd = isStickerCmd || autoMode === 'sticker';
         const effSoundCmd = isSoundCmd || autoMode === 'sound';
 
-        if (!effStickerCmd && !effSoundCmd && !isStickerVnCmd) continue;
+        if (!effStickerCmd && !effSoundCmd) continue;
         if (!media) {
           await sock.sendMessage(jid, { text: 'Kirim / reply foto atau videonya dulu, baru kasih perintah itu.' }, { quoted: msg });
           continue;
         }
-        if (isStickerVnCmd && media.type !== 'video') {
-          await sock.sendMessage(jid, { text: 'Mode .svn butuh *video*. Kalau mau Sound Sticker native, pakai #sticker.' }, { quoted: msg });
-          continue;
-        }
 
         await enqueue(jid, async () => {
-          if (effSoundCmd || isStickerVnCmd) {
+          if (effSoundCmd) {
             await sock.sendMessage(jid, { text: 'Video masuk antrean. Sedang disiapkan menjadi stiker bersuara.' }, { quoted: msg });
           } else {
             await sock.sendMessage(jid, { text: 'Tunggu bentar, lagi disiapkan...' }, { quoted: msg });
@@ -249,58 +242,36 @@ Catatan: Sound Sticker cuma bunyi di WhatsApp yang udah dapet fitur itu (Beta 2.
               // Fallback: pakai hasil deteksi media utama (cara lama) - termasuk video
               // yang dikirim dengan caption #sticker langsung / di-reply.
               const fallback = media && (media.type === 'image' || media.type === 'video') ? media : null;
-              const visual = [own, quoted, fallback].find((m) => m && (m.type === 'image' || m.type === 'video'));
-              const sepAudio = [own, quoted, media].find((m) => m && m.type === 'audio');
+              const visual = [own, quoted, fallback].find((m) => m && m.type === 'video');
               if (!visual) {
-                console.log('DEBUG #sticker visual tidak ketemu. keys pesan:', Object.keys(unwrapMessage(msg.message || {})), '| own:', own?.type, '| quoted:', quoted?.type, '| media:', media?.type);
-                await sock.sendMessage(jid, { text: 'Botnya gagal membaca media di pesan itu. Coba cara ini: kirim ulang videonya langsung ke chat bot (bukan reply), caption-nya #sticker.' }, { quoted: msg });
+                const adaFoto = [own, quoted, fallback].some((m) => m && m.type === 'image');
+                if (adaFoto) {
+                  await sock.sendMessage(jid, { text: '#sticker butuh *video bersuara*. Kalau dari foto mau jadi stiker biasa aja, pakai perintah .s' }, { quoted: msg });
+                } else {
+                  console.log('DEBUG #sticker video tidak ketemu. keys pesan:', Object.keys(unwrapMessage(msg.message || {})), '| own:', own?.type, '| quoted:', quoted?.type, '| media:', media?.type);
+                  await sock.sendMessage(jid, { text: 'Botnya gagal membaca media di pesan itu. Coba cara ini: kirim ulang videonya langsung ke chat bot (bukan reply), caption-nya #sticker.' }, { quoted: msg });
+                }
                 return;
               }
-              console.log('DEBUG #sticker visual:', visual.type, '| audio terpisah:', sepAudio?.type || '-');
               const vBuf = await downloadMediaOf(msg, visual, logger);
-              const vFile = tmpFile(visual.type === 'video' ? '.mp4' : '.jpg');
+              const vFile = tmpFile('.mp4');
               await writeFile(vFile, vBuf);
-              const extraFiles = [vFile];
               try {
-                let animated = false;
-                let seconds;
-                if (visual.type === 'video') {
-                  // Animasi: batas WA 5 detik buat stiker + audio
-                  animated = true;
-                  seconds = config.soundAnimatedMaxSeconds;
-                  await videoToSticker(vFile, outSticker, { seconds });
-                  await videoToVoiceNote(vFile, outAudio, seconds);
-                } else {
-                  // Gambar diam: batas WA 10 detik audio, suaranya dari audio/VN yang di-reply
-                  seconds = config.soundStaticMaxSeconds;
-                  await imageToSticker(vFile, outSticker);
-                  if (!sepAudio) {
-                    await sock.sendMessage(jid, { text: 'Foto doang gak ada suaranya. Caranya: kirim foto ini sambil *reply* pesan audio / voice note, caption-nya #sticker. Atau sekalian kirim video bersuara.' }, { quoted: msg });
-                    return;
-                  }
-                  const aBuf = await downloadMediaOf(msg, sepAudio, logger);
-                  const aFile = tmpFile('.ogg');
-                  extraFiles.push(aFile);
-                  await writeFile(aFile, aBuf);
-                  await videoToVoiceNote(aFile, outAudio, seconds);
-                }
+                const seconds = config.soundAnimatedMaxSeconds;
+                await videoToSticker(vFile, outSticker, { seconds });
+                await videoToVoiceNote(vFile, outAudio, seconds);
                 const stickerBuf = await applyStickerWm(outSticker);
                 const audioBuf = await readFile(outAudio);
                 await sock.sendMessage(jid, {
-                  audioSticker: { sticker: stickerBuf, audio: audioBuf, animated, seconds, packname: config.packname, author: config.author },
+                  audioSticker: { sticker: stickerBuf, audio: audioBuf, animated: true, seconds, packname: config.packname, author: config.author },
                 });
               } finally {
-                await cleanup(...extraFiles);
+                await cleanup(vFile);
               }
             } else if (media.type === 'video') {
               await videoToSticker(inFile, outSticker);
               await applyStickerWm(outSticker);
               await sock.sendMessage(jid, { sticker: { url: outSticker } });
-              if (isStickerVnCmd) {
-                // Mode lama: stiker WebP + suaranya dikirim sebagai voice note setelahnya.
-                await videoToVoiceNote(inFile, outAudio);
-                await sock.sendMessage(jid, { audio: { url: outAudio }, ptt: true, mimetype: 'audio/ogg; codecs=opus' });
-              }
             } else {
               await imageToSticker(inFile, outSticker);
               await applyStickerWm(outSticker);

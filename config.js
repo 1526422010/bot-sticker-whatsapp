@@ -15,7 +15,6 @@ export const config = {
   autoDetect: true, // true = tanpa perintah pun video langsung jadi Sound Sticker & foto jadi stiker. false = wajib pakai perintah
   maxVideoSeconds: 8,      // stiker WA animasi idealnya <= 8-10 detik
   soundAnimatedMaxSeconds: 10,  // durasi maks Sound Sticker animasi (detik)
-  soundStaticMaxSeconds: 10,    // batas Sound Sticker native WA: gambar statis maks 10 detik audio
   stickerSize: 512,        // wajib 512x512 buat stiker WA
   fps: 15,                 // makin tinggi makin halus, tapi file makin gede
   maxStickerKB: 950,       // batas aman stiker animasi WA ~1MB

@@ -9,7 +9,7 @@ pendek -> jadi stiker, dan video bersuara -> jadi **Sound Sticker**.
 stiker (WebP) + audio dalam SATU pesan, ada ikon audio di pojoknya,
 tap ikonnya -> suaranya bunyi (loop 3x). Fitur ini tersedia mulai
 WhatsApp Beta Android 2.26.47.1; di WA versi lama stiker tampil tanpa suara.
-Durasi diatur di `config.js` (`soundAnimatedMaxSeconds` / `soundStaticMaxSeconds`).
+Durasi diatur di `config.js` (`soundAnimatedMaxSeconds`).
 
 Bot ini mengirimnya pakai fork **@pontalabs/baileys** (`audioSticker`),
 karena Baileys resmi belum support format ini. Fork = kode pihak ketiga,
@@ -18,9 +18,6 @@ ada script saat install — pakai nomor kedua khusus bot, jangan nomor utama.
 Mode:
 1. **`#sticker` dari video** — video -> WebP animasi (crop full 512x512)
    + audio asli video -> OGG Opus, dikirim sebagai satu `audioSticker`.
-2. **`#sticker` foto + reply audio** — foto -> WebP statis + audio/VN yang
-   di-reply jadi satu `audioSticker`.
-3. **`.svn`** — stiker WebP animasi + voice note, 2 pesan terpisah.
 
 ## Perintah
 
@@ -28,8 +25,7 @@ Mode:
 |---|---|
 | `.ping` | Cek bot aktif -> `Pong! Bot WhatsApp aktif.` |
 | `.s` | Kirim/reply foto atau video -> stiker (animasi kalau video) |
-| `#sticker` | Video -> Sound Sticker native. Atau: foto + reply audio/VN -> Sound Sticker |
-| `.svn` | Reply video -> stiker animasi + voice note (cara lama) |
+| `#sticker` | Video -> Sound Sticker native |
 | `.menu` | Daftar perintah |
 
 ## Cara jalanin
