@@ -52,7 +52,7 @@ Requirements: **Node.js 18+** and **ffmpeg** installed.
 # Windows:        winget install ffmpeg   (or download from ffmpeg.org)
 # Termux:         pkg install nodejs ffmpeg
 
-cd bot-stiker-wa
+cd bot-stiker-whatsapp
 npm install
 npm start
 ```
@@ -85,4 +85,4 @@ original author's name (Pakaw) is credited.
   Don't spam, don't send bulk messages.
 - Long/large videos get rejected by WA as stickers (limit ~1MB). This bot
   automatically lowers fps & quality when the result is too big.
-- Running 24/7? Put it on a VPS / an always-on PC and run it with `pm2 start index.js`.
+- Running 24/7? Put it on a VPS / an always-on PC and run it with `pm2 start index.js/npm start`.
