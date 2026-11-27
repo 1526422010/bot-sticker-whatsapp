@@ -46,7 +46,7 @@ Syarat: **Node.js 18+** dan **ffmpeg** terinstall.
 # Windows:        winget install ffmpeg   (atau download dari ffmpeg.org)
 # Termux:         pkg install nodejs ffmpeg
 
-cd bot-stiker-wa
+cd bot-sticker-whatsapp
 npm install
 npm start
 ```
