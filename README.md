@@ -73,7 +73,7 @@ fps, dan batas ukuran stiker.
 ## Lisensi
 
 MIT — lihat file [LICENSE](LICENSE). Bebas dipakai & diubah, wajib mencantumkan
-nama pembuat asli (Pakaw).
+nama pembuat asli.
 
 ## Catatan penting
 
