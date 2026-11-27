@@ -49,7 +49,7 @@ Syarat: **Node.js 18+** dan **ffmpeg** terinstall.
 # Windows:        winget install ffmpeg   (atau download dari ffmpeg.org)
 # Termux:         pkg install nodejs ffmpeg
 
-cd bot-stiker-wa
+cd bot-stiker-whatsapp
 npm install
 npm start
 ```
@@ -82,4 +82,4 @@ nama pembuat asli (Pakaw).
   Jangan spam, jangan kirim massal.
 - Video panjang/gede bakal ditolak WA sebagai stiker (batas ~1MB). Bot ini otomatis
   nurunin fps & kualitas kalau hasilnya kegedean.
-- Jalan 24 jam? Taruh di VPS / PC yang nyala terus, jalanin pakai `pm2 start index.js`.
+- Jalan 24 jam? Taruh di VPS / PC yang nyala terus, jalanin pakai `pm2 start index.js/npm start`.
