@@ -1,23 +1,26 @@
 # Bot Stiker WA Bersuara 🤖🔊
 
-Bot WhatsApp kayak di postingan referensi (bot "Minato"): kirim `.ping` dibalas Pong,
-kirim video pendek -> jadi **stiker bersuara**.
+Bot WhatsApp pembuat stiker: kirim `.ping` dibalas Pong, kirim foto / video
+pendek -> jadi stiker, dan video bersuara -> jadi **Sound Sticker**.
 
-![Contoh](https://web.facebook.com/share/p/1AGYKWLeAT/) — postingan Alexander Zulfikar, 25 Nov 2026:
-screenshot chat jam 02.36, user kirim video monyet 1 detik, bot balas
-*"Video masuk antrean. Sedang disiapkan menjadi stiker bersuara."*
+## Sound Sticker (fitur WhatsApp)
 
-## Jujur dulu: "stiker bersuara" itu trik, bukan format asli
+**Sound Sticker** adalah format stiker WhatsApp yang membawa track audio:
+stiker (WebP) + audio dalam SATU pesan, ada ikon audio di pojoknya,
+tap ikonnya -> suaranya bunyi (loop 3x). Fitur ini tersedia mulai
+WhatsApp Beta Android 2.26.47.1; di WA versi lama stiker tampil tanpa suara.
+Durasi diatur di `config.js` (`soundAnimatedMaxSeconds` / `soundStaticMaxSeconds`).
 
-Format stiker WhatsApp itu **WebP 512x512 dan TIDAK bisa menyimpan audio sama sekali**.
-Jadi semua bot "stiker bersuara" pakai salah satu dari 2 trik ini — dua-duanya ada di bot ini:
+Bot ini mengirimnya pakai fork **@pontalabs/baileys** (`audioSticker`),
+karena Baileys resmi belum support format ini. Fork = kode pihak ketiga,
+ada script saat install — pakai nomor kedua khusus bot, jangan nomor utama.
 
-1. **`.ssuara` (mode screenshot)** — bot kirim 2 pesan berurutan nempel:
-   stiker animasi (bisu) + voice note berisi suara asli videonya.
-   Kelihatan kayak satu stiker yang bunyi pas VN-nya diputar.
-2. **`.vsuara` (mode video note)** — video dipotong persegi & dikirim sebagai
-   *video note* (ptv): autoplay, looping, **ada suaranya beneran** dalam 1 pesan.
-   Ini yang paling terasa kayak "stiker hidup bersuara".
+Mode:
+1. **`#sticker` dari video** — video -> WebP animasi (crop full 512x512)
+   + audio asli video -> OGG Opus, dikirim sebagai satu `audioSticker`.
+2. **`#sticker` foto + reply audio** — foto -> WebP statis + audio/VN yang
+   di-reply jadi satu `audioSticker`.
+3. **`.svn`** — stiker WebP animasi + voice note, 2 pesan terpisah.
 
 ## Perintah
 
@@ -25,13 +28,21 @@ Jadi semua bot "stiker bersuara" pakai salah satu dari 2 trik ini — dua-duanya
 |---|---|
 | `.ping` | Cek bot aktif -> `Pong! Bot WhatsApp aktif.` |
 | `.s` | Kirim/reply foto atau video -> stiker (animasi kalau video) |
-| `.ssuara` | Reply video -> stiker animasi + voice note suaranya |
-| `.vsuara` | Reply video -> video persegi bersuara (video note) |
+| `#sticker` | Video -> Sound Sticker native. Atau: foto + reply audio/VN -> Sound Sticker |
+| `.svn` | Reply video -> stiker animasi + voice note (cara lama) |
 | `.menu` | Daftar perintah |
 
 ## Cara jalanin
 
 Syarat: **Node.js 18+** dan **ffmpeg** terinstall.
+
+> **Windows — error `spawn ffmpeg ENOENT`?** Artinya ffmpeg belum ada / belum masuk PATH.
+> Cara paling gampang: download `ffmpeg.exe` (dari https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip,
+> ambil `bin/ffmpeg.exe` dari dalam zip), **taruh file itu di folder project ini (sebelah `index.js`)**,
+> lalu restart bot. Bot versi baru otomatis mendeteksi `ffmpeg.exe` lokal itu.
+> Alternatif: `winget install Gyan.FFmpeg`, lalu **tutup & buka terminal baru** (wajib, biar PATH ke-refresh),
+> cek dengan `ffmpeg -version`. Bot juga sekarang berhenti di awal dengan pesan jelas kalau ffmpeg gak ketemu,
+> bukan error di tengah pas bikin stiker.
 
 ```bash
 # install ffmpeg (pilih sesuai OS)
@@ -46,9 +57,9 @@ npm start
 
 1. QR muncul di terminal -> scan pakai WhatsApp di HP: **Setelan > Perangkat tertaut > Tautkan perangkat**
 2. Login tersimpan di folder `auth/` — restart gak perlu scan lagi (jangan share folder ini ke siapa pun, itu = kunci akun WA lo)
-3. Chat nomor bot itu: kirim `.ping`, lalu kirim video 1-8 detik + caption `.ssuara`
+3. Chat nomor bot itu: kirim `.ping`, lalu kirim video 1-8 detik + caption `#sticker`
 
-Test konversi tanpa konek WA (bikin video contoh sendiri):
+Test konversi tanpa konek WA (pakai video test yang dibuat otomatis):
 
 ```bash
 npm run test-convert

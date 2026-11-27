@@ -1,3 +1,7 @@
 node_modules/
 auth/
 tmp/
+*.log
+bot.pid
+package-lock.json
+pp.jpg
