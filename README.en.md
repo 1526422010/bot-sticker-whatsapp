@@ -6,7 +6,7 @@ A WhatsApp sticker maker bot: send `.ping` and it replies Pong, send a photo /
 short video and it becomes a sticker, and a video with audio becomes a
 **Sound Sticker**.
 
-## Sound Stickers (a WhatsApp feature)
+## Sound Stickers (WhatsApp feature)
 
 A **Sound Sticker** is a WhatsApp sticker format that carries an audio track:
 a sticker (WebP) + audio in ONE message, with a small audio icon in its corner —
