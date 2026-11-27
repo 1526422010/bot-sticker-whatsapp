@@ -33,7 +33,7 @@ Mode:
 
 ## Cara jalanin
 
-Syarat: **Node.js 18+** dan **ffmpeg** terinstall.
+Syarat: **Node.js 20+** dan **ffmpeg** terinstall.
 
 > **Windows — error `spawn ffmpeg ENOENT`?** Artinya ffmpeg belum ada / belum masuk PATH.
 > Cara paling gampang: download `ffmpeg.exe` (dari https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip,
@@ -49,7 +49,7 @@ Syarat: **Node.js 18+** dan **ffmpeg** terinstall.
 # Windows:        winget install ffmpeg   (atau download dari ffmpeg.org)
 # Termux:         pkg install nodejs ffmpeg
 
-cd bot-stiker-whatsapp
+cd bot-stiker-wa
 npm install
 npm start
 ```
@@ -73,7 +73,7 @@ fps, dan batas ukuran stiker.
 ## Lisensi
 
 MIT — lihat file [LICENSE](LICENSE). Bebas dipakai & diubah, wajib mencantumkan
-nama pembuat asli.
+nama pembuat asli (Pakaw).
 
 ## Catatan penting
 
@@ -82,4 +82,4 @@ nama pembuat asli.
   Jangan spam, jangan kirim massal.
 - Video panjang/gede bakal ditolak WA sebagai stiker (batas ~1MB). Bot ini otomatis
   nurunin fps & kualitas kalau hasilnya kegedean.
-- Jalan 24 jam? Taruh di VPS / PC yang nyala terus, jalanin pakai `pm2 start index.js/npm start`.
+- Jalan 24 jam? Taruh di VPS / PC yang nyala terus, jalanin pakai `pm2 start index.js`.

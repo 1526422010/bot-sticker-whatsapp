@@ -36,7 +36,7 @@ Mode:
 
 ## Running it
 
-Requirements: **Node.js 18+** and **ffmpeg** installed.
+Requirements: **Node.js 20+** and **ffmpeg** installed.
 
 > **Windows — `spawn ffmpeg ENOENT` error?** It means ffmpeg is missing / not on PATH.
 > The easiest fix: download `ffmpeg.exe` (from https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip,
@@ -52,7 +52,7 @@ Requirements: **Node.js 18+** and **ffmpeg** installed.
 # Windows:        winget install ffmpeg   (or download from ffmpeg.org)
 # Termux:         pkg install nodejs ffmpeg
 
-cd bot-stiker-whatsapp
+cd bot-stiker-wa
 npm install
 npm start
 ```
@@ -76,7 +76,7 @@ fps, and the sticker size limit.
 ## License
 
 MIT — see the [LICENSE](LICENSE) file. Free to use & modify, as long as the
-original author's name is credited.
+original author's name (Pakaw) is credited.
 
 ## Important notes
 
@@ -85,4 +85,4 @@ original author's name is credited.
   Don't spam, don't send bulk messages.
 - Long/large videos get rejected by WA as stickers (limit ~1MB). This bot
   automatically lowers fps & quality when the result is too big.
-- Running 24/7? Put it on a VPS / an always-on PC and run it with `pm2 start index.js/npm start`.
+- Running 24/7? Put it on a VPS / an always-on PC and run it with `pm2 start index.js`.

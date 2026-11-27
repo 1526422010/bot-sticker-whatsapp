@@ -9,8 +9,8 @@ echo "== 1/5 Update & install ffmpeg =="
 apt-get update -y
 apt-get install -y ffmpeg curl unzip
 
-echo "== 2/5 Install Node.js 20 (kalau belum ada / masih lama) =="
-if ! command -v node >/dev/null || [ "$(node -v | sed 's/v//;s/\..*//')" -lt 18 ]; then
+echo "== 2/5 Install Node.js 20 (wajib >= 20 buat @pontalabs/baileys) =="
+if ! command -v node >/dev/null || [ "$(node -v | sed 's/v//;s/\..*//')" -lt 20 ]; then
   curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
   apt-get install -y nodejs
 fi
